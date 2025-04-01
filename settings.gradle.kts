@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "VismaChallenge"
 include(":app")
+include(":domain")
+include(":data")
+include(":expenses")
