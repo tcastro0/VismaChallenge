@@ -1,4 +1,4 @@
-package com.visma.features
+package com.visma.expenses
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
