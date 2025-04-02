@@ -17,4 +17,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
+
+
+    testImplementation(kotlin("test"))
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
 }
