@@ -15,9 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.visma.expenses.presentation.screens.ExpenseListScreen
 import com.visma.expenses.presentation.viewmodel.ExpenseListViewModel
 import com.visma.vismachallenge.ui.theme.VismaChallengeTheme
-import com.visma.expenses.presentation.screens.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,16 +38,15 @@ fun MainScreen() {
     VismaChallengeTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            floatingActionButton = { fabContent?.invoke() }
+            floatingActionButton = { fabContent?.invoke() },
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 ExpenseListScreen(
                     expensesViewModel,
                     onAddExpenseClick = { },
-                    fab = { fabContent = it }
+                    fab = { fabContent = it },
                 )
             }
         }
     }
 }
-
