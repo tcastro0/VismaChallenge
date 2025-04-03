@@ -15,11 +15,15 @@ kotlin {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
+   implementation(libs.dagger.hilt.core)
+   ksp(libs.dagger.compiler)
+
+   // implementation(libs.hilt)
+  //  ksp(libs.hilt.compiler)
 
 
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
+
 }
