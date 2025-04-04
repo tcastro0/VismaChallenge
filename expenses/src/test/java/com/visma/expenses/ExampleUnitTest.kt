@@ -1,4 +1,4 @@
-package com.visma.features
+package com.visma.expenses
 
 import org.junit.Test
 
