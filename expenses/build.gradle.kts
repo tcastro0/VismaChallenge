@@ -59,7 +59,7 @@ dependencies {
     implementation(project(":data"))
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation(libs.icons.extended)
 
     implementation(project(":domain"))
     testImplementation(libs.junit)

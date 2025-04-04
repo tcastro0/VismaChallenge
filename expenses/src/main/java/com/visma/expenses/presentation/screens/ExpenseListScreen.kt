@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.visma.domain.features.expenses.models.Expense
+import com.visma.domain.features.expenses.models.VismaCurrency
 import com.visma.expenses.presentation.components.EmptyListComponent
 import com.visma.expenses.presentation.components.ExpenseAddFabComponent
 import com.visma.expenses.presentation.state.ExpenseListState
@@ -23,6 +24,7 @@ import com.visma.expenses.presentation.viewmodel.ExpenseListViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
 
 @Composable
 fun ExpenseListScreen(
@@ -80,14 +82,14 @@ fun ExpenseScreenPreview() {
                     id = "Lunch",
                     description = "Lunch",
                     amount = 12.00,
-                    date = System.currentTimeMillis(),
-                    currency = "EUR"
+                    date = LocalDateTime.now(),
+                    currency = VismaCurrency.USD
                 ), Expense(
                     id = "Coffee",
                     description = "Coffee",
                     amount = 1.00,
-                    date = System.currentTimeMillis(),
-                    currency = "USD"
+                    date = LocalDateTime.now(),
+                    currency = VismaCurrency.EUR
                 )
             )
         )

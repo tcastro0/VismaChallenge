@@ -1,6 +1,7 @@
 package com.visma.domain.features.expenses.usecases
 
 import com.visma.domain.features.expenses.models.Expense
+import com.visma.domain.features.expenses.models.VismaCurrency
 import com.visma.domain.features.expenses.repository.ExpensesRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -13,7 +14,6 @@ import org.junit.Before
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.util.UUID
 
 class GetExpensesUseCaseTest {
@@ -33,19 +33,15 @@ class GetExpensesUseCaseTest {
                 id = UUID.randomUUID().toString(),
                 description = "Lunch",
                 amount = 12.00,
-                date = LocalDateTime.now().toEpochSecond(
-                    ZoneOffset.UTC
-                ),
-                currency = "EUR"
+                date = LocalDateTime.now() ,
+                currency = VismaCurrency.USD
             ),
             Expense(
                 id = UUID.randomUUID().toString(),
                 description = "Transport",
                 amount = 2.50,
-                date = LocalDateTime.now().minusDays(2).toEpochSecond(
-                    ZoneOffset.UTC
-                ),
-                currency = "USD"
+                date = LocalDateTime.now().minusDays(2),
+                currency = VismaCurrency.EUR
             )
         )
         coEvery { expenseRepository.getAllExpenses() } returns flowOf(expenses)

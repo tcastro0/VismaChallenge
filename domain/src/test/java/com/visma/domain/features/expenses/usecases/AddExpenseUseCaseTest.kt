@@ -1,6 +1,7 @@
 package com.visma.domain.features.expenses.usecases
 
 import com.visma.domain.features.expenses.models.Expense
+import com.visma.domain.features.expenses.models.VismaCurrency
 import com.visma.domain.features.expenses.repository.ExpensesRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -15,7 +16,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -24,14 +24,11 @@ class AddExpenseUseCaseTest {
     private lateinit var addExpenseUseCase: AddExpenseUseCase
     private val expenseRepository: ExpensesRepository = mockk()
 
-    private var dateNow: Long = 0
+    private var dateNow: LocalDateTime = LocalDateTime.now()
 
 
     @Before
     fun setUp() {
-        dateNow = LocalDateTime.now().toEpochSecond(
-            ZoneOffset.UTC
-        )
         addExpenseUseCase = AddExpenseUseCase(expenseRepository)
         coEvery { expenseRepository.addExpense(any()) } just Runs
     }
@@ -43,7 +40,7 @@ class AddExpenseUseCaseTest {
             description = "Coffee",
             amount = 3.50,
             date = dateNow,
-            currency = "EUR"
+            currency = VismaCurrency.EUR,
         )
 
         addExpenseUseCase(expense)
@@ -59,7 +56,7 @@ class AddExpenseUseCaseTest {
             description = "Dinner",
             amount = 15.00,
             date = dateNow,
-            currency = "EUR"
+            currency = VismaCurrency.EUR,
         )
         coEvery { expenseRepository.addExpense(any()) } throws RuntimeException("Database Error")
 
@@ -77,7 +74,7 @@ class AddExpenseUseCaseTest {
             description = "Invalid",
             amount = -5.00,
             date = dateNow,
-            currency = "EUR"
+            currency = VismaCurrency.EUR,
         )
 
         val exception = Assert.assertThrows(IllegalArgumentException::class.java) {
@@ -95,10 +92,8 @@ class AddExpenseUseCaseTest {
             id = "teste invalid date",
             description = "Invalid",
             amount = 1.0,
-            date = LocalDateTime.now().plusDays(1).toEpochSecond(
-                ZoneOffset.UTC
-            ),
-            currency = "EUR"
+            date = LocalDateTime.now().plusDays(1) ,
+            currency = VismaCurrency.EUR,
         )
 
         val exception = Assert.assertThrows(IllegalArgumentException::class.java) {
@@ -116,28 +111,22 @@ class AddExpenseUseCaseTest {
                 "1",
                 "Coffee",
                 3.50,
-                currency = "EUR",
-                date = LocalDateTime.now().plusDays(-1).toEpochSecond(
-                    ZoneOffset.UTC
-                )
+                currency = VismaCurrency.EUR,
+                date = LocalDateTime.now().plusDays(-1)
             ),
             Expense(
                 "2",
                 "Lunch",
                 12.00,
-                currency = "EUR",
-                date = LocalDateTime.now().plusDays(-3).toEpochSecond(
-                    ZoneOffset.UTC
-                )
+                currency = VismaCurrency.EUR,
+                date = LocalDateTime.now().plusDays(-3)
             ),
             Expense(
                 "3",
                 "Groceries",
                 50.00,
-                currency = "EUR",
-                date = LocalDateTime.now().toEpochSecond(
-                    ZoneOffset.UTC
-                )
+                currency = VismaCurrency.EUR,
+                date = LocalDateTime.now()
             )
         )
 
