@@ -10,6 +10,5 @@ data class ExpenseEntity(
     val description: String,
     val amount: Double,
     val date: Long,
-    val currency: String,
-    val imagePath: String? = null
+    val currency: String
 )

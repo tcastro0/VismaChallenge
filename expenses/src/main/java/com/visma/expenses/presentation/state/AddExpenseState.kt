@@ -12,5 +12,7 @@ data class AddExpenseState(
 ) {
     val isSaveEnabled: Boolean
         get() = expense.amount > 0 &&
-                expense.description.isNotEmpty()
+                expense.description.isNotEmpty() &&
+                expense.imagePath != null &&
+                expense.imageId != null
 }

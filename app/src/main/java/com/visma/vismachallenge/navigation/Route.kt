@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Route(val route: String) {
     @Serializable
-    object ExpenseList : Route("expense_list")
+    data object ExpenseList : Route("expense_list")
     @Serializable
-    object AddExpense : Route("add_expense")
+    data object AddExpense : Route("add_expense")
+    @Serializable
+    data object PhotoCapture : Route("photo_capture")
 
 }

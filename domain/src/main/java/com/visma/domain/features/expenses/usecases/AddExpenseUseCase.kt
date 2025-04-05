@@ -9,11 +9,11 @@ import javax.inject.Inject
 class AddExpenseUseCase @Inject constructor(
     private val expenseRepository: ExpensesRepository
 ) {
-    suspend operator fun invoke(expense: Expense): VismaResult {
+    suspend operator fun invoke(expense: Expense): VismaResult<Unit> {
         return try {
             validateExpense(expense)
             expenseRepository.addExpense(expense)
-            VismaResult.Success
+            VismaResult.Success(Unit)
         } catch (e: Exception) {
             VismaResult.Error(e.message ?: "Unknown error",cause = e)
         }
@@ -25,6 +25,12 @@ class AddExpenseUseCase @Inject constructor(
         }
         if (expense.date.isAfter(LocalDateTime.now())) {
             throw IllegalArgumentException("Invalid date")
+        }
+        if (expense.description.isBlank()) {
+            throw IllegalArgumentException("Invalid description")
+        }
+        if (expense.imagePath == null) {
+            throw IllegalArgumentException("Invalid image")
         }
     }
 }
