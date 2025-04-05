@@ -16,9 +16,9 @@ interface PhotoExpenseDao {
 
     @Transaction
     @Query("SELECT * FROM photos p INNER JOIN photo_expense pe ON p.id = pe.photoID WHERE pe.expenseID = :expenseId")
-    suspend fun getPhotosByExpense(expenseId: String): Flow<List<PhotoEntity>>
+    fun getPhotosByExpense(expenseId: String): Flow<List<PhotoEntity>>
 
     @Transaction
     @Query("SELECT * FROM expenses e INNER JOIN photo_expense pe ON e.id = pe.expenseID WHERE pe.photoID = :photoId")
-    suspend fun getExpensesByPhoto(photoId: String): Flow<List<ExpenseEntity>>
+    fun getExpensesByPhoto(photoId: String): Flow<List<ExpenseEntity>>
 }

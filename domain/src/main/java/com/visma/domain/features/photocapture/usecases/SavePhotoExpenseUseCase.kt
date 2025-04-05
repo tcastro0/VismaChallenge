@@ -6,9 +6,9 @@ import com.visma.domain.features.photocapture.repository.PhotoCaptureRepository
 import javax.inject.Inject
 
 
-class SavePhotoCaptureUseCase @Inject constructor(
+class SavePhotoExpenseUseCase @Inject constructor(
     private val photoCaptureRepository: PhotoCaptureRepository
-    ) {
+) {
     suspend operator fun invoke(imagePath: String): VismaResult<Photo> {
         return try {
             val result = photoCaptureRepository.savePhoto(imagePath)

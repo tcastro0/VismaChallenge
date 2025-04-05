@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.visma.data.database.VismaDatabase
 import com.visma.data.features.expenses.models.daos.ExpenseDao
+import com.visma.data.features.photocapture.models.daos.PhotoDao
 import com.visma.data.features.photocapture.models.daos.PhotoExpenseDao
 import dagger.Module
 import dagger.Provides
@@ -34,5 +35,10 @@ object DatabaseModule {
     @Provides
     fun providePhotoExpenseDao(db: VismaDatabase): PhotoExpenseDao {
         return db.photoExpenseDao()
+    }
+
+    @Provides
+    fun providePhotoDao(db: VismaDatabase): PhotoDao {
+        return db.photoDao()
     }
 }
