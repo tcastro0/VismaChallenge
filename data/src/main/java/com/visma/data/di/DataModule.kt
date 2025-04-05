@@ -4,9 +4,12 @@ import android.content.Context
 import com.visma.data.features.expenses.models.daos.ExpenseDao
 import com.visma.data.features.expenses.repository.ExpenseRepositoryImpl
 import com.visma.data.features.photocapture.models.daos.PhotoDao
+import com.visma.data.features.photocapture.models.daos.PhotoExpenseDao
 import com.visma.data.features.photocapture.repository.PhotoCaptureRepositoryImpl
+import com.visma.data.features.photocapture.repository.PhotoExpenseRepositoryImpl
 import com.visma.domain.features.expenses.repository.ExpensesRepository
 import com.visma.domain.features.photocapture.repository.PhotoCaptureRepository
+import com.visma.domain.features.photocapture.repository.PhotoExpenseRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +34,11 @@ object DataModule {
         photoDao: PhotoDao
     ): PhotoCaptureRepository {
         return PhotoCaptureRepositoryImpl(context, photoDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePhotoExpenseRepository(photoExpenseDao: PhotoExpenseDao): PhotoExpenseRepository {
+        return PhotoExpenseRepositoryImpl(photoExpenseDao)
     }
 }
