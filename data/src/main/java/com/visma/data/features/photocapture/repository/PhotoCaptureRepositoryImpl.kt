@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -33,7 +34,7 @@ class PhotoCaptureRepositoryImpl @Inject constructor(
         }
 
         val photo = Photo(
-            id = imageFile.name,
+            id = UUID.randomUUID().toString(),
             filename = imageFile.name,
             path = imageFile.absolutePath
         )
