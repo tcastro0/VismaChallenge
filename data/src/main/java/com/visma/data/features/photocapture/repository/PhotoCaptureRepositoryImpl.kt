@@ -1,7 +1,6 @@
 package com.visma.data.features.photocapture.repository
 
 import android.content.Context
-import androidx.core.net.toUri
 import com.visma.data.features.photocapture.models.daos.PhotoDao
 import com.visma.data.features.photocapture.models.mappers.toEntity
 import com.visma.domain.features.photocapture.models.Photo
@@ -19,15 +18,15 @@ class PhotoCaptureRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     val photoDao: PhotoDao
 ) : PhotoCaptureRepository {
-    override suspend fun savePhoto(imagePath: String): Photo = withContext(Dispatchers.IO) {
-        val file = File(context.filesDir, "photos")
-        if (!file.exists()) file.mkdirs()
+    override suspend fun savePhoto(file: File): Photo = withContext(Dispatchers.IO) {
+        val destinationDir = File(context.filesDir, "photos")
+        if (!destinationDir.exists()) destinationDir.mkdirs()
 
-        val imageFile = File(file, "${System.currentTimeMillis()}.jpg")
-        val inputStream = context.contentResolver.openInputStream(imagePath.toUri())
+        val imageFile = File(destinationDir, "${System.currentTimeMillis()}.jpg")
+        val inputStream = file.inputStream()
         val outputStream = FileOutputStream(imageFile)
 
-        inputStream?.use { input ->
+        inputStream.use { input ->
             outputStream.use { output ->
                 input.copyTo(output)
             }

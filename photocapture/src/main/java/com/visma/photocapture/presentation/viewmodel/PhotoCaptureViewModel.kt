@@ -12,9 +12,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.visma.domain.core.VismaResult
 import com.visma.domain.features.photocapture.usecases.SavePhotoCaptureUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -27,7 +29,7 @@ class PhotoCaptureViewModel @Inject constructor(
     private val savePhotoUseCase: SavePhotoCaptureUseCase
 ) : ViewModel() {
 
-    var photoUri = mutableStateOf<Uri?>(null)
+    var photoInfo = mutableStateOf<Pair<Uri, String>?>(null)
         private set
 
     private var _isCameraInitialized = false
@@ -89,12 +91,23 @@ class PhotoCaptureViewModel @Inject constructor(
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val uri = Uri.fromFile(photoFile)
-                    photoUri.value = uri
-
-                    // Optional: save to DB/local storage
                     viewModelScope.launch {
-                        uri.path?.let { savePhotoUseCase(it) }
-                        Log.e("PHOTO","Photo saved to: $uri")
+                        uri.path?.let {
+                            val result = savePhotoUseCase(photoFile)
+                            when (result) {
+                                is VismaResult.Success -> {
+                                    photoInfo.value =
+                                        Pair(result.result.path.toUri(), result.result.id)
+                                    Log.e("PHOTO", "Photo saved to: $uri")
+                                }
+
+                                is VismaResult.Error -> {
+                                    photoInfo.value = Pair(Uri.EMPTY, result.message)
+                                    Log.e("PHOTO", "Error saving photo: ${result.message}")
+                                }
+                            }
+                        }
+
                     }
                 }
             }

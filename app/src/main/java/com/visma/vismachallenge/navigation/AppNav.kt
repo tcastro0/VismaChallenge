@@ -64,8 +64,11 @@ fun AppNavGraph(
 
             PhotoCaptureScreen(
                 photoViewModel,
-                onBackClick = {
-                    navController.previousBackStackEntry?.savedStateHandle?.set("resultUri", it.toString())
+                onBackClick = { uri, id ->
+                    navController.previousBackStackEntry?.savedStateHandle?.apply {
+                        set("resultUri", uri.toString())
+                        set("resultId", id)
+                    }
                     navController.popBackStack()
                 })
             fab(null)

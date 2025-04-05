@@ -13,7 +13,7 @@ fun ExpenseEntity.toDomain(): Expense {
         description = this.description,
         amount = this.amount,
         date = LocalDateTime.ofInstant(Instant.ofEpochMilli(this.date), ZoneOffset.UTC),
-        imagePath = this.imagePath,
+        imagePath = null,
         currency = VismaCurrency.fromCurrency(this.currency),
     )
 }
@@ -24,7 +24,7 @@ fun Expense.toEntity(): ExpenseEntity {
         description = this.description,
         amount = this.amount,
         date = this.date.toInstant(ZoneOffset.UTC).toEpochMilli(),
-        imagePath = this.imagePath,
+
         currency = this.currency.getCurrency(),
     )
 }

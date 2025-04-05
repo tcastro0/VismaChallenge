@@ -2,6 +2,7 @@ package com.visma.photocapture.presentation.screens
 
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -27,46 +28,54 @@ import com.visma.photocapture.presentation.components.CameraPermissionHandlerCom
 import com.visma.photocapture.presentation.viewmodel.PhotoCaptureViewModel
 
 @Composable
-fun PhotoCaptureScreen(viewModel: PhotoCaptureViewModel, onBackClick: (Uri?) -> Unit) {
-    CameraPermissionHandlerComponent  (
+fun PhotoCaptureScreen(viewModel: PhotoCaptureViewModel, onBackClick: (Uri?, String?) -> Unit) {
+    CameraPermissionHandlerComponent(
         onPermissionsGranted = {
-            PhotoCaptureScreenContent(viewModel,onBackClick)
+            PhotoCaptureScreenContent(viewModel, onBackClick)
         }
 
     )
 }
 
- @Composable
- fun PhotoCaptureScreenContent(viewModel: PhotoCaptureViewModel,onBackClick: (Uri) -> Unit){
-     val context = LocalContext.current
-     val lifecycleOwner = LocalLifecycleOwner.current
-     val photoUri by viewModel.photoUri
+@Composable
+fun PhotoCaptureScreenContent(
+    viewModel: PhotoCaptureViewModel,
+    onBackClick: (Uri, String) -> Unit
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val photoInfo by viewModel.photoInfo
 
-     val previewView = remember { PreviewView(context) }
+    val previewView = remember { PreviewView(context) }
 
-     LaunchedEffect(Unit) {
-         viewModel.setupCameraIfNeeded(lifecycleOwner, context, previewView)
-     }
+    LaunchedEffect(Unit) {
+        viewModel.setupCameraIfNeeded(lifecycleOwner, context, previewView)
+    }
 
-     Box(modifier = Modifier.fillMaxSize()) {
-         AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
+    Box(modifier = Modifier.fillMaxSize()) {
+        AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 
-         FloatingActionButton(
-             onClick = { viewModel.takePhoto(context) },
-             modifier = Modifier
-                 .align(Alignment.BottomCenter)
-                 .padding(16.dp)
-         ) {
-             Icon(Icons.Default.CameraAlt, contentDescription = "Take Photo")
-         }
-     }
+        FloatingActionButton(
+            onClick = { viewModel.takePhoto(context) },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp)
+        ) {
+            Icon(Icons.Default.CameraAlt, contentDescription = "Take Photo")
+        }
+    }
 
-     photoUri?.let {
-         Image(
-             painter = rememberAsyncImagePainter(it),
-             contentDescription = null,
-             modifier = Modifier.size(200.dp)
-         )
-         onBackClick(it)
-     }
- }
+    photoInfo?.let {
+        if (it.first != Uri.EMPTY) {
+            Image(
+                painter = rememberAsyncImagePainter(it.first),
+                contentDescription = null,
+                modifier = Modifier.size(200.dp)
+            )
+            onBackClick(it.first, it.second)
+        } else {
+            Toast.makeText(LocalContext.current, it.second, Toast.LENGTH_LONG).show()
+        }
+
+    }
+}

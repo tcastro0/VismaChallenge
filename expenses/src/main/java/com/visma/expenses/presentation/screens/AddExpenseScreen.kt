@@ -1,6 +1,6 @@
 package com.visma.expenses.presentation.screens
 
-import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,11 +62,14 @@ fun AddExpenseScreen(
     var showSnackbarError by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val  photoUri = remember { mutableStateOf(Uri.EMPTY) }
 
     navBackStackEntry?.savedStateHandle?.get<String>("resultUri")?.let {
-        val returnedUri = it.toUri()
-        photoUri.value = returnedUri
+        viewModel.updateExpense(imagePath = it.toUri().toString())
+        Log.e("resultUri", it.toUri().toString())
+    }
+    navBackStackEntry?.savedStateHandle?.get<String>("resultId")?.let {
+        viewModel.updateExpense(imageId = it)
+        Log.e("resultId", it)
     }
 
     if (showSnackbar) {
@@ -120,8 +123,7 @@ fun AddExpenseScreen(
                 updateExpense = { description, amount, date, currency ->
                     viewModel.updateExpense(amount, description, date, currency)
                 },
-                takePhoto,
-                photoUri.value
+                takePhoto
             )
         }
     }
@@ -133,8 +135,7 @@ fun ExpenseForm(
     expense: Expense,
     availableCurrencies: List<String>,
     updateExpense: (String?, Double?, LocalDateTime?, String?) -> Unit,
-    takePhoto: () -> Unit,
-    photoUri: Uri?
+    takePhoto: () -> Unit
 ) {
     var amountText by remember {
         mutableStateOf(expense.amount.toString().takeIf { it != "0.0" } ?: "")
@@ -197,7 +198,7 @@ fun ExpenseForm(
         }
 
 
-        photoUri?.let {
+        expense.imagePath?.let {
             Image(
                 painter = rememberAsyncImagePainter(it),
                 contentDescription = null,
