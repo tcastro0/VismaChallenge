@@ -23,6 +23,11 @@ navigation = "2.8.9"
 kotlinxSerializationJson = "1.7.0"
 composeAnimations = "1.7.8"
 iconsExtended = "1.7.8"
+cameraX = "1.4.2"
+cameraView = "1.4.2"
+coil = "2.4.0"
+accompanist = "0.34.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,7 +65,15 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 compose-animations = { module = "androidx.compose.animation:animation", version.ref = "composeAnimations" }
 icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "iconsExtended" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"  }
 
+
+camerax-core = { group = "androidx.camera", name = "camera-core", version = "cameraX" }
+camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version = "cameraX" }
+camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version = "cameraX" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 
 [plugins]

@@ -60,6 +60,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.icons.extended)
+    implementation(libs.compose.navigation)
 
     implementation(project(":domain"))
     testImplementation(libs.junit)
@@ -70,5 +71,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+    implementation(libs.coil.compose)
     debugImplementation(libs.mockk)
 }

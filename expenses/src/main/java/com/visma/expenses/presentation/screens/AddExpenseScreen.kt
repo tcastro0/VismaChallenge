@@ -1,5 +1,7 @@
 package com.visma.expenses.presentation.screens
 
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,6 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.visma.domain.features.expenses.models.Expense
 import com.visma.expenses.presentation.components.AddExpensesTopBar
 import com.visma.expenses.presentation.components.DatePickerComponent
@@ -36,17 +45,29 @@ import com.visma.expenses.presentation.components.DropdownSelector
 import com.visma.expenses.presentation.viewmodel.AddExpenseViewModel
 import io.mockk.mockk
 import java.time.LocalDateTime
+import androidx.core.net.toUri
 
 @Composable
 fun AddExpenseScreen(
+    navController: NavController,
     viewModel: AddExpenseViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    takePhoto: () -> Unit
 ) {
     val state = viewModel.state.collectAsState()
     val expense by remember(state) { derivedStateOf { state.value.expense } }
+    val navBackStackEntry = navController.currentBackStackEntry
+    
     var showSnackbar by remember { mutableStateOf(false) }
     var showSnackbarError by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val  photoUri = remember { mutableStateOf(Uri.EMPTY) }
+
+    navBackStackEntry?.savedStateHandle?.get<String>("resultUri")?.let {
+        val returnedUri = it.toUri()
+        photoUri.value = returnedUri
+    }
 
     if (showSnackbar) {
         LaunchedEffect(snackbarHostState) {
@@ -98,14 +119,12 @@ fun AddExpenseScreen(
                 viewModel.availableCurrencies,
                 updateExpense = { description, amount, date, currency ->
                     viewModel.updateExpense(amount, description, date, currency)
-                }
-
+                },
+                takePhoto,
+                photoUri.value
             )
-
         }
-
     }
-
 
 }
 
@@ -114,8 +133,9 @@ fun ExpenseForm(
     expense: Expense,
     availableCurrencies: List<String>,
     updateExpense: (String?, Double?, LocalDateTime?, String?) -> Unit,
-
-    ) {
+    takePhoto: () -> Unit,
+    photoUri: Uri?
+) {
     var amountText by remember {
         mutableStateOf(expense.amount.toString().takeIf { it != "0.0" } ?: "")
     }
@@ -171,11 +191,28 @@ fun ExpenseForm(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
+        IconButton  (onClick = { takePhoto.invoke() }) {
+            Icon(Icons.Default.AddAPhoto, contentDescription = "Add a photo")
+        }
+
+
+        photoUri?.let {
+            Image(
+                painter = rememberAsyncImagePainter(it),
+                contentDescription = null,
+                modifier = Modifier.size(200.dp)
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AddExpenseScreenPreview() {
-    AddExpenseScreen(mockk()) { }
+    AddExpenseScreen(
+        navController = mockk(),
+        viewModel = mockk(),
+        onBackClick = {},
+        takePhoto = {})
 }

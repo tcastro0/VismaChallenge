@@ -36,10 +36,18 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.icons.extended)
+
     implementation(project(":domain"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -48,4 +56,13 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.coil.compose)
+
+    implementation(libs.accompanist.permissions)
+
 }
