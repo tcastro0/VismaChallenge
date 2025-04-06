@@ -19,6 +19,7 @@ import com.visma.domain.features.expenses.models.Expense
 import com.visma.domain.features.expenses.models.VismaCurrency
 import com.visma.expenses.presentation.components.EmptyListComponent
 import com.visma.expenses.presentation.components.ExpenseAddFabComponent
+import com.visma.expenses.presentation.components.ExpensiveListItemComponent
 import com.visma.expenses.presentation.state.ExpenseListState
 import com.visma.expenses.presentation.viewmodel.ExpenseListViewModel
 import io.mockk.every
@@ -61,7 +62,9 @@ fun ExpenseListScreen(
             val expenses = state.value.data
             LazyColumn {
                 items(expenses.size, key = null) { index ->
-                    Text(expenses[index].description)
+                    ExpensiveListItemComponent(expenses[index]){
+
+                    }
                 }
             }
         }else {
