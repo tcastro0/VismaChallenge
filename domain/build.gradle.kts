@@ -25,5 +25,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
+    testImplementation(libs.paging.common)
 
+    implementation(libs.paging.common)
 }

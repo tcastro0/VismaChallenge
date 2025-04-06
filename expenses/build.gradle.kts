@@ -73,4 +73,6 @@ dependencies {
 
     implementation(libs.coil.compose)
     debugImplementation(libs.mockk)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
 }

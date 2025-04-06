@@ -27,7 +27,10 @@ cameraX = "1.4.2"
 cameraView = "1.4.2"
 coil = "2.4.0"
 accompanist = "0.34.0"
-
+androidx-paging = "3.3.6"
+androidx-paging-common = "3.3.6"
+paging-compose = "3.3.6"
+paging-room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -74,6 +77,10 @@ camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", vers
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+androidx-paging = { module = "androidx.paging:paging-runtime",version.ref = "androidx-paging" }
+paging-common = { module = "androidx.paging:paging-common",version.ref = "androidx-paging-common" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-compose" }
+androidx-paging-room = { module = "androidx.room:room-paging", version.ref = "paging-room" }
 
 
 [plugins]
