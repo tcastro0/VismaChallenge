@@ -11,6 +11,7 @@ import com.visma.photos.presentation.viewmodels.PhotosViewModel
 fun PhotosScreen(
     viewModel: PhotosViewModel,
     onAddPhotoClick: () -> Unit,
+    onItemClick: (String) -> Unit,
     fab: (@Composable () -> Unit) -> Unit
 ) {
     val state = viewModel.state.collectAsState()
@@ -22,7 +23,7 @@ fun PhotosScreen(
         }
     }
 
-    PhotosGridComponent(photos)
+    PhotosGridComponent(photos,onItemClick)
 
 
 }

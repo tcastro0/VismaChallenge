@@ -40,14 +40,16 @@ fun MainScreen() {
     VismaChallengeTheme {
         Scaffold(
             floatingActionButton = {
-                AnimatedVisibility (
-                    visible = fabContent!=null,
+                AnimatedVisibility(
+                    visible = fabContent != null,
                     enter = slideInVertically { it },
                     exit = slideOutVertically { it }
                 ) { fabContent?.invoke() }
             },
             bottomBar = {
-                BottomMenu(navController = navController)
+
+                    BottomMenu(navController = navController)
+
             }
         ) { innerPadding ->
             AppNavGraph(

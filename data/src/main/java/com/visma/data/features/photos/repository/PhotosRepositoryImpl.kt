@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 class PhotosRepositoryImpl @Inject constructor(
-    val photosDao: PhotoDao,
+    private val photosDao: PhotoDao,
 ) : PhotosRepository {
 
     override suspend fun getPagedPhotos(): Flow<PagingData<Photo>> {
@@ -26,6 +26,16 @@ class PhotosRepositoryImpl @Inject constructor(
             Log.d("getPagedExpenses", "pagingData: $pagingData")
             pagingData.map { it.toDomain() }
         }
+    }
+
+    override suspend fun getPhotoById(id: String): Photo? {
+        return try {
+            photosDao.getPhotoById(id).toDomain()
+        } catch (e: Exception) {
+            Log.e("getPhotoById", "Error getting photo by id: $id", e)
+            null
+        }
+
     }
 
 }

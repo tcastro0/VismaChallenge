@@ -25,7 +25,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.visma.domain.features.photocapture.models.Photo
 
 @Composable
-fun PhotosGridComponent(photos: LazyPagingItems<Photo>) {
+fun PhotosGridComponent(photos: LazyPagingItems<Photo>, onItemClick: (String) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 120.dp),
         contentPadding = PaddingValues(16.dp),
@@ -39,7 +39,8 @@ fun PhotosGridComponent(photos: LazyPagingItems<Photo>) {
                         defaultElevation = 4.dp
                     ),
                     shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {onItemClick(it.id)}
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(it.path),

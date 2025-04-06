@@ -8,15 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.visma.expenses.presentation.screens.AddExpenseScreen
 import com.visma.expenses.presentation.screens.ExpenseListScreen
 import com.visma.expenses.presentation.viewmodel.AddExpenseViewModel
 import com.visma.expenses.presentation.viewmodel.ExpenseListViewModel
 import com.visma.photocapture.presentation.screens.PhotoCaptureScreen
 import com.visma.photocapture.presentation.viewmodel.PhotoCaptureViewModel
+import com.visma.photos.presentation.screens.PhotoDetailsScreen
 import com.visma.photos.presentation.screens.PhotosScreen
+import com.visma.photos.presentation.viewmodels.PhotoDetailsViewModel
 import com.visma.photos.presentation.viewmodels.PhotosViewModel
 
 @Composable
@@ -46,9 +50,25 @@ fun AppNavGraph(
             exitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
         ) {
             val viewmodel: PhotosViewModel = hiltViewModel()
-            PhotosScreen(viewmodel,
-            onAddPhotoClick = {},
-            fab = fab)
+            PhotosScreen(
+                viewmodel,
+                onAddPhotoClick = {},
+                fab = fab,
+                onItemClick = { navController.navigate(Route.PhotoDetails.createRoute(it)) }
+            )
+        }
+
+        composable(
+            route = Route.PhotoDetails.route,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val viewModel: PhotoDetailsViewModel = hiltViewModel()
+            PhotoDetailsScreen(
+                viewModel = viewModel,
+                id = id,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
 

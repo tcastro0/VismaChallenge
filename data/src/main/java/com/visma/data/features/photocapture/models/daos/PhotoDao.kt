@@ -15,4 +15,7 @@ interface PhotoDao {
 
     @Query("SELECT * FROM photos ORDER BY timestamp DESC")
     fun getPagedPhotos(): PagingSource<Int, PhotoEntity>
+
+    @Query("SELECT * FROM photos where id = :id LIMIT 1")
+    fun getPhotoById(id: String): PhotoEntity
 }

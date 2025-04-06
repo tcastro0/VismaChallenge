@@ -14,5 +14,9 @@ sealed class Route(val route: String) {
     data object PhotoCapture : Route("photo_capture")
     @Serializable
     data object Photos : Route("photos")
+    @Serializable
+    data object PhotoDetails : Route("photos_details/{id}"){
+        fun createRoute(id: String) = "photos_details/$id"
+    }
 
 }
