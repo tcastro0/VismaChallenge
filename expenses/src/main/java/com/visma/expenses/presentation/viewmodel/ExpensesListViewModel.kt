@@ -2,11 +2,13 @@ package com.visma.expenses.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.visma.domain.features.expenses.usecases.GetExpensesUseCase
 import com.visma.expenses.presentation.state.ExpenseListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,10 +27,12 @@ class ExpenseListViewModel @Inject constructor(
 
     private fun loadExpenses() {
         viewModelScope.launch {
-            getExpensesUseCase().catch {
+            val flow =  getExpensesUseCase().cachedIn(viewModelScope).catch {
                 state.value = state.value.copy(isLoading = false, error = it.message)
-            }.collect { list ->
-                state.value = state.value.copy(isLoading = false, data = list)
+            }
+
+            state.update {
+                it.copy(isLoading = false, data = flow)
             }
         }
     }

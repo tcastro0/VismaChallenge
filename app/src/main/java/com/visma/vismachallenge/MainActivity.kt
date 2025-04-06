@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.visma.vismachallenge.navigation.AppNavGraph
+import com.visma.vismachallenge.navigation.ui.BottomMenu
 import com.visma.vismachallenge.ui.theme.VismaChallengeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,6 +46,9 @@ fun MainScreen() {
                     exit = slideOutVertically { it }
                 ) { fabContent?.invoke() }
             },
+            bottomBar = {
+                BottomMenu(navController = navController)
+            }
         ) { innerPadding ->
             AppNavGraph(
                 modifier = Modifier.padding(innerPadding),

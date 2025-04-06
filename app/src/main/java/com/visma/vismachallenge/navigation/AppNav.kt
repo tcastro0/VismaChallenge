@@ -2,6 +2,8 @@ package com.visma.vismachallenge.navigation
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,9 +25,32 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController,
-        startDestination = Route.ExpenseList.route,
+        startDestination = Route.Dashboard.route,
         modifier = modifier
     ) {
+        composable(
+            Route.Dashboard.route,
+            enterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
+        ) {
+            fab(null)
+            Column {
+                Text("Dashboard")
+            }
+        }
+        composable(
+            Route.Photos.route,
+            enterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
+        ) {
+            fab(null)
+            Column {
+                Text("Photos")
+            }
+        }
+
+
+
         composable(
             Route.ExpenseList.route,
             enterTransition = { slideInHorizontally(initialOffsetX = { -it }) },

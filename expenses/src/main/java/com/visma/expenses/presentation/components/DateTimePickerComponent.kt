@@ -26,13 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.visma.domain.core.extensions.toFormattedDate
+import com.visma.domain.core.extensions.toFormattedTime
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,8 +60,8 @@ fun DatePickerComponent(
     var formattedDate by remember { mutableStateOf("") }
     var formattedTime by remember { mutableStateOf("") }
 
-    formattedDate = formatDate(selectedDate)
-    formattedTime = formatTime(selectedTime)
+    formattedDate = selectedDate?.toFormattedDate() ?: "Select Date"
+    formattedTime = selectedTime?.toFormattedTime() ?: "Select Time"
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -106,8 +107,7 @@ fun DatePickerComponent(
                             .toLocalDate()
                         val updatedDateTime =
                             LocalDateTime.of(localDate, selectedTime ?: LocalTime.MIDNIGHT)
-
-                        formattedDate = formatDate(updatedDateTime.toLocalDate())
+                        formattedDate = if(updatedDateTime.toLocalDate() != null)  updatedDateTime.toLocalDate().toFormattedDate() else  "Select Date"
                         onDateSelected(updatedDateTime)
 
                     }
@@ -129,7 +129,7 @@ fun DatePickerComponent(
                 TextButton(onClick = {
                     val newTime = LocalTime.of(timePickerState.hour, timePickerState.minute)
                     val updatedDateTime = LocalDateTime.of(selectedDate ?: LocalDate.now(), newTime)
-                    formattedTime = formatTime(updatedDateTime.toLocalTime())
+                    formattedTime = if(updatedDateTime.toLocalTime() != null)  updatedDateTime.toLocalTime().toFormattedTime() else  "Select Time"
                     onDateSelected(updatedDateTime)
                     showTimePicker = false
                 }) {
@@ -149,11 +149,3 @@ fun DatePickerComponent(
 
 }
 
-
-private fun formatDate(input: LocalDate?): String {
-    return input?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "Select Date"
-}
-
-private fun formatTime(input: LocalTime?): String {
-    return input?.format(DateTimeFormatter.ofPattern("HH:mm")) ?: "Select Time"
-}

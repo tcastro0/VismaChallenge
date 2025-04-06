@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.compose.navigation)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -82,5 +83,5 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.compose.animations)
-
+    implementation(libs.icons.extended)
 }
