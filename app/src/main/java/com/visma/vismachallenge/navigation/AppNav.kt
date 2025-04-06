@@ -16,6 +16,8 @@ import com.visma.expenses.presentation.viewmodel.AddExpenseViewModel
 import com.visma.expenses.presentation.viewmodel.ExpenseListViewModel
 import com.visma.photocapture.presentation.screens.PhotoCaptureScreen
 import com.visma.photocapture.presentation.viewmodel.PhotoCaptureViewModel
+import com.visma.photos.presentation.screens.PhotosScreen
+import com.visma.photos.presentation.viewmodels.PhotosViewModel
 
 @Composable
 fun AppNavGraph(
@@ -43,10 +45,10 @@ fun AppNavGraph(
             enterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
         ) {
-            fab(null)
-            Column {
-                Text("Photos")
-            }
+            val viewmodel: PhotosViewModel = hiltViewModel()
+            PhotosScreen(viewmodel,
+            onAddPhotoClick = {},
+            fab = fab)
         }
 
 
