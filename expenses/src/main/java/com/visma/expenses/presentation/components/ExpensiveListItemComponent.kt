@@ -54,7 +54,6 @@ fun ExpensiveListItemComponent(expense: Expense, onActionClick: () -> Unit) {
                 Icons.Default.Receipt,
                 contentDescription = "Profile picture",
                 modifier = Modifier
-                    .size(48.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
@@ -75,8 +74,9 @@ fun ExpensiveListItemComponent(expense: Expense, onActionClick: () -> Unit) {
             Column(
                 horizontalAlignment = Alignment.End
             ) {
+
                 Text(
-                    text = expense.amount.toString(),
+                    text = "${expense.amount} ${expense.currency.getSymbol()}",
                     color = Color.Blue,
                     fontWeight = FontWeight.Bold,
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
