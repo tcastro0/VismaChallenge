@@ -52,9 +52,14 @@ fun AppNavGraph(
             val viewmodel: PhotosViewModel = hiltViewModel()
             PhotosScreen(
                 viewmodel,
-                onAddPhotoClick = {},
+                onAddPhotoClick = {
+                    navController.navigate(Route.AddExpense.route){
+                        launchSingleTop = true
+                    }
+                    navController.navigate(Route.PhotoCapture.route)
+                },
                 fab = fab,
-                onItemClick = { navController.navigate(Route.PhotoDetails.createRoute(it)) }
+                onItemClick = { navController.navigate(Route.PhotoDetails.createRoute(it)) },
             )
         }
 

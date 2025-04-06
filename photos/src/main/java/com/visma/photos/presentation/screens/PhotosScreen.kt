@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.visma.photos.presentation.components.PhotoAddFabComponent
 import com.visma.photos.presentation.components.PhotosGridComponent
 import com.visma.photos.presentation.viewmodels.PhotosViewModel
 
@@ -19,7 +20,7 @@ fun PhotosScreen(
 
     LaunchedEffect(Unit) {
         fab {
-
+            PhotoAddFabComponent(onAddPhotoClick)
         }
     }
 
