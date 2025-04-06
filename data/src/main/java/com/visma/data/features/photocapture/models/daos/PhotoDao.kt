@@ -1,7 +1,9 @@
 package com.visma.data.features.photocapture.models.daos
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.Query
 import com.visma.data.features.photocapture.models.entities.PhotoEntity
 
 
@@ -10,4 +12,10 @@ import com.visma.data.features.photocapture.models.entities.PhotoEntity
 interface PhotoDao {
     @Insert
     suspend fun insertPhoto(photo: PhotoEntity)
+
+    @Query("SELECT * FROM photos ORDER BY timestamp DESC")
+    fun getPagedPhotos(): PagingSource<Int, PhotoEntity>
+
+    @Query("SELECT * FROM photos where id = :id LIMIT 1")
+    fun getPhotoById(id: String): PhotoEntity
 }
