@@ -1,5 +1,6 @@
 package com.visma.domain.features.expenses.usecases
 
+import com.visma.domain.core.VismaResult
 import com.visma.domain.features.expenses.models.Expense
 import com.visma.domain.features.expenses.models.VismaCurrency
 import com.visma.domain.features.expenses.repository.ExpensesRepository
@@ -17,7 +18,6 @@ import org.junit.Assert
 import org.junit.Before
 import java.time.LocalDateTime
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 class AddExpenseUseCaseTest {
 
@@ -41,6 +41,7 @@ class AddExpenseUseCaseTest {
             amount = 3.50,
             date = dateNow,
             currency = VismaCurrency.EUR,
+            imagePath = "path"
         )
 
         addExpenseUseCase(expense)
@@ -57,18 +58,20 @@ class AddExpenseUseCaseTest {
             amount = 15.00,
             date = dateNow,
             currency = VismaCurrency.EUR,
+            imagePath = "path"
         )
         coEvery { expenseRepository.addExpense(any()) } throws RuntimeException("Database Error")
 
-        val exception = assertFailsWith<RuntimeException> {
-            addExpenseUseCase(expense)
-        }
-        Assert.assertEquals("Database Error", exception.message)
+        val result =  addExpenseUseCase(expense)
+
+        assert(result is VismaResult.Error)
+        val castResult = result as VismaResult.Error
+        Assert.assertEquals("Database Error",castResult.message)
     }
 
 
     @Test
-    fun `does not add expense if amount is negative`() {
+    fun `does not add expense if amount is negative`() = runTest {
         val expense = Expense(
             id = "teste invalid amount",
             description = "Invalid",
@@ -77,31 +80,37 @@ class AddExpenseUseCaseTest {
             currency = VismaCurrency.EUR,
         )
 
-        val exception = Assert.assertThrows(IllegalArgumentException::class.java) {
-            runTest { addExpenseUseCase(expense) }
-        }
+
+          val result =  addExpenseUseCase(expense)
+
 
         coVerify(exactly = 0) { expenseRepository.addExpense(any()) }
-        Assert.assertEquals("Invalid amount", exception.message)
+
+        assert(result is VismaResult.Error)
+        val castResult = result as VismaResult.Error
+        Assert.assertEquals("Invalid amount",castResult.message)
 
     }
 
     @Test
-    fun `does not add expense if date is in future`() {
+    fun `does not add expense if date is in future`() = runTest {
         val expense = Expense(
             id = "teste invalid date",
             description = "Invalid",
             amount = 1.0,
             date = LocalDateTime.now().plusDays(1) ,
             currency = VismaCurrency.EUR,
+            imagePath = "path"
         )
 
-        val exception = Assert.assertThrows(IllegalArgumentException::class.java) {
-            runTest { addExpenseUseCase(expense) }
-        }
+        val result =  addExpenseUseCase(expense)
+
 
         coVerify(exactly = 0) { expenseRepository.addExpense(any()) }
-        Assert.assertEquals("Invalid date", exception.message)
+
+        assert(result is VismaResult.Error)
+        val castResult = result as VismaResult.Error
+        Assert.assertEquals("Invalid date", castResult.message)
     }
 
     @Test
@@ -112,21 +121,24 @@ class AddExpenseUseCaseTest {
                 "Coffee",
                 3.50,
                 currency = VismaCurrency.EUR,
-                date = LocalDateTime.now().plusDays(-1)
+                date = LocalDateTime.now().plusDays(-1),
+                        imagePath = "path"
             ),
             Expense(
                 "2",
                 "Lunch",
                 12.00,
                 currency = VismaCurrency.EUR,
-                date = LocalDateTime.now().plusDays(-3)
+                date = LocalDateTime.now().plusDays(-3),
+                imagePath = "path"
             ),
             Expense(
                 "3",
                 "Groceries",
                 50.00,
                 currency = VismaCurrency.EUR,
-                date = LocalDateTime.now()
+                date = LocalDateTime.now(),
+                imagePath = "path"
             )
         )
 
