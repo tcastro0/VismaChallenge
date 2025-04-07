@@ -6,10 +6,12 @@ import androidx.paging.cachedIn
 import com.visma.domain.features.expenses.usecases.GetExpensesUseCase
 import com.visma.expenses.presentation.state.ExpenseListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,12 +29,14 @@ class ExpenseListViewModel @Inject constructor(
 
     private fun loadExpenses() {
         viewModelScope.launch {
-            val flow =  getExpensesUseCase().cachedIn(viewModelScope).catch {
-                state.value = state.value.copy(isLoading = false, error = it.message)
-            }
+            withContext(Dispatchers.IO) {
+                val flow = getExpensesUseCase().cachedIn(viewModelScope).catch {
+                    state.value = state.value.copy(isLoading = false, error = it.message)
+                }
 
-            state.update {
-                it.copy(isLoading = false, data = flow)
+                state.update {
+                    it.copy(isLoading = false, data = flow)
+                }
             }
         }
     }

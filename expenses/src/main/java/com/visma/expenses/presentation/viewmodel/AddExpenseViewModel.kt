@@ -8,9 +8,11 @@ import com.visma.domain.features.expenses.usecases.AddExpenseUseCase
 import com.visma.domain.features.photocapture.usecases.SavePhotoExpenseUseCase
 import com.visma.expenses.presentation.state.AddExpenseState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -27,21 +29,28 @@ class AddExpenseViewModel @Inject constructor(
 
     fun saveExpense() {
         viewModelScope.launch {
-            state.value = state.value.copy(isLoading = true)
-            delay(500)
+            withContext(Dispatchers.IO) {
 
-            val result = addExpenseUseCase(state.value.expense)
-            when (result) {
-                is VismaResult.Success -> {
-                    state.value = state.value.copy(isLoading = false, success = true)
-                    saveExpensePhotoRelation(state.value.expense.id, state.value.expense.imageId!!)
+
+                state.value = state.value.copy(isLoading = true)
+                delay(500)
+
+                val result = addExpenseUseCase(state.value.expense)
+                when (result) {
+                    is VismaResult.Success -> {
+                        state.value = state.value.copy(isLoading = false, success = true)
+                        saveExpensePhotoRelation(
+                            state.value.expense.id,
+                            state.value.expense.imageId!!
+                        )
+                    }
+
+                    is VismaResult.Error -> {
+                        state.value = state.value.copy(isLoading = false, error = result.message)
+                    }
                 }
 
-                is VismaResult.Error -> {
-                    state.value = state.value.copy(isLoading = false, error = result.message)
-                }
             }
-
         }
     }
 

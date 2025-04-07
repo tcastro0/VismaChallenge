@@ -19,7 +19,9 @@ import androidx.lifecycle.viewModelScope
 import com.visma.domain.core.VismaResult
 import com.visma.domain.features.photocapture.usecases.SavePhotoCaptureUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -92,18 +94,20 @@ class PhotoCaptureViewModel @Inject constructor(
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val uri = Uri.fromFile(photoFile)
                     viewModelScope.launch {
-                        uri.path?.let {
-                            val result = savePhotoUseCase(photoFile)
-                            when (result) {
-                                is VismaResult.Success -> {
-                                    photoInfo.value =
-                                        Pair(result.result.path.toUri(), result.result.id)
-                                    Log.e("PHOTO", "Photo saved to: $uri")
-                                }
+                        withContext(Dispatchers.IO) {
+                            uri.path?.let {
+                                val result = savePhotoUseCase(photoFile)
+                                when (result) {
+                                    is VismaResult.Success -> {
+                                        photoInfo.value =
+                                            Pair(result.result.path.toUri(), result.result.id)
+                                        Log.e("PHOTO", "Photo saved to: $uri")
+                                    }
 
-                                is VismaResult.Error -> {
-                                    photoInfo.value = Pair(Uri.EMPTY, result.message)
-                                    Log.e("PHOTO", "Error saving photo: ${result.message}")
+                                    is VismaResult.Error -> {
+                                        photoInfo.value = Pair(Uri.EMPTY, result.message)
+                                        Log.e("PHOTO", "Error saving photo: ${result.message}")
+                                    }
                                 }
                             }
                         }
